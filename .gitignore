@@ -1,0 +1,23 @@
+# Environment
+.env
+
+# Backend
+backend/vendor/
+backend/composer.lock
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.dockerignore
