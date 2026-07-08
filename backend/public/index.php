@@ -14,6 +14,8 @@ $container->setShared('db', function () use ($config) {
     return new Postgresql($config['database']);
 });
 
+require __DIR__ . '/../app/Config/services.php';
+
 $app = new Micro($container);
 
 $app->before(function () {

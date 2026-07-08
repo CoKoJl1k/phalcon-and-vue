@@ -3,26 +3,20 @@
 namespace App\Controllers;
 
 use App\Models\SyncLog;
+use App\Services\LogService;
 use App\Services\SyncService;
-use App\Stripe\MockStripeClient;
+use Phalcon\Db\Adapter\Pdo\Postgresql;
 use Phalcon\Di\Injectable;
 
+/** @property LogService $logService */
+/** @property SyncService $syncService */
+/** @property Postgresql $db */
 class SyncController extends Injectable
 {
     public function syncAction(): string
     {
-        $stripeClient = new MockStripeClient();
-        $syncService = new SyncService($this->db, $stripeClient);
-        $result = $syncService->run();
-
-        $log = new SyncLog();
-        $log->status = $result['success'] ? 'success' : 'error';
-        $log->message = json_encode([
-            'created' => $result['created'] ?? 0,
-            'updated' => $result['updated'] ?? 0,
-            'errors'  => $result['errors'] ?? [],
-        ]);
-        $log->save();
+        $result = $this->syncService->run();
+        $this->logService->save($result);
 
         return json_encode($result);
     }
@@ -33,6 +27,7 @@ class SyncController extends Injectable
         if (!$log) {
             return json_encode(null);
         }
+
         return json_encode([
             'id'         => $log->id,
             'status'     => $log->status,

@@ -4,8 +4,9 @@ namespace App\Services;
 
 use App\Stripe\StripeClientInterface;
 use Phalcon\Db\Adapter\Pdo\Postgresql;
+use Phalcon\Di\Injectable;
 
-class SyncService
+class SyncService extends Injectable
 {
     private Postgresql $db;
     private StripeClientInterface $stripe;
