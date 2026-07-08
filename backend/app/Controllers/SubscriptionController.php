@@ -10,7 +10,7 @@ class SubscriptionController extends Injectable
 {
     public function indexAction(): string
     {
-        $subscriptions = $this->subscriptionService->getAll($this->request->getQuery());
+        $subscriptions = $this->subscriptionService->getAll();
 
         return json_encode($subscriptions);
     }

@@ -7,37 +7,16 @@ use Phalcon\Di\Injectable;
 /** @property \Phalcon\Db\Adapter\Pdo\Postgresql $db */
 class SubscriptionService extends Injectable
 {
-    public function getAll(array $params): array
+    public function getAll(): array
     {
-        $conditions = [];
-        $bind = [];
-
-        if (!empty($params['status'])) {
-            $conditions[] = 's.status = :status';
-            $bind['status'] = $params['status'];
-        }
-
-        if (!empty($params['customer_id'])) {
-            $conditions[] = 's.customer_id = :customer_id';
-            $bind['customer_id'] = (int)$params['customer_id'];
-        }
-
-        if (!empty($params['search'])) {
-            $conditions[] = 'LOWER(c.name) LIKE :search';
-            $bind['search'] = '%' . mb_strtolower($params['search']) . '%';
-        }
-
-        $where = count($conditions) ? 'WHERE ' . implode(' AND ', $conditions) : '';
-
         $sql = "SELECT s.*, c.id AS c_id, c.name AS c_name, c.email AS c_email,
                        p.id AS p_id, p.name AS p_name, p.amount AS p_amount, p.currency AS p_currency
                 FROM subscriptions s
                 JOIN customers c ON c.id = s.customer_id
                 JOIN products p ON p.id = s.product_id
-                {$where}
                 ORDER BY s.created_at DESC";
 
-        $rows = $this->db->fetchAll($sql, \PDO::FETCH_ASSOC, $bind);
+        $rows = $this->db->fetchAll($sql, \PDO::FETCH_ASSOC);
 
         $result = [];
         foreach ($rows as $row) {
