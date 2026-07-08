@@ -67,7 +67,7 @@ docker-compose up -d
 
 | Method | Path | Описание |
 |--------|------|----------|
-| GET | /api/subscriptions?status=&customer_id=&search= | Список подписок |
+| GET | /api/subscriptions | Список подписок |
 | GET | /api/customers | Список клиентов |
 | GET | /api/products | Список продуктов |
 | POST | /api/sync | Запуск синхронизации |
