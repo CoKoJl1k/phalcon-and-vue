@@ -2,17 +2,19 @@
 
 /** @var \Phalcon\Di\FactoryDefault $container */
 
+use App\Services\LogService;
+use App\Services\SubscriptionService;
 use App\Services\SyncService;
 use App\Stripe\MockStripeClient;
 
 $container->set('subscriptionService', function () use ($container) {
-    $service = new \App\Services\SubscriptionService();
+    $service = new SubscriptionService();
     $service->setDI($container);
     return $service;
 });
 
 $container->set('logService', function () use ($container) {
-    $service = new \App\Services\LogService();
+    $service = new LogService();
     $service->setDI($container);
     return $service;
 });

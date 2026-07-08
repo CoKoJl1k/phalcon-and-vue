@@ -19,20 +19,6 @@ class MockStripeClient implements StripeClientInterface
         ['id' => 'prod_004', 'name' => 'Enterprise',   'description' => 'Full suite with dedicated support', 'amount' => 10000, 'currency' => 'usd'],
     ];
 
-    private int $syncIteration;
-
-    public function __construct()
-    {
-        $counterFile = '/tmp/stripe_mock_counter';
-        $count = 0;
-        if (file_exists($counterFile)) {
-            $count = (int)file_get_contents($counterFile);
-        }
-        $count++;
-        file_put_contents($counterFile, (string)$count);
-        $this->syncIteration = $count;
-    }
-
     public function getCustomers(): array
     {
         return self::$customers;
@@ -47,7 +33,7 @@ class MockStripeClient implements StripeClientInterface
     {
         $base = strtotime('2026-01-01');
 
-        $subs = [
+        return [
             [
                 'id' => 'sub_001',
                 'customer_id' => 'cus_001',
@@ -129,17 +115,5 @@ class MockStripeClient implements StripeClientInterface
                 'period_end'  => date('c', $base - 86400 * 60),
             ],
         ];
-
-        if ($this->syncIteration >= 2) {
-            $subs[0]['status'] = 'past_due';
-            $subs[5]['status'] = 'canceled';
-            $subs[7]['status'] = 'past_due';
-        }
-
-        if ($this->syncIteration >= 3) {
-            $subs[2]['status'] = 'canceled';
-        }
-
-        return $subs;
     }
 }
