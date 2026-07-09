@@ -9,7 +9,9 @@ class SubscriptionService extends Injectable
 {
     public function getAll(): array
     {
-        $sql = "SELECT s.*, c.id AS c_id, c.name AS c_name, c.email AS c_email,
+        $sql = "SELECT s.id, s.stripe_id, s.status, s.customer_id, s.product_id,
+                       s.current_period_start, s.current_period_end, s.created_at, s.updated_at,
+                       c.id AS c_id, c.name AS c_name, c.email AS c_email,
                        p.id AS p_id, p.name AS p_name, p.amount AS p_amount, p.currency AS p_currency
                 FROM subscriptions s
                 JOIN customers c ON c.id = s.customer_id

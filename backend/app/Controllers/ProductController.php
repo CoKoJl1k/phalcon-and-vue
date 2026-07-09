@@ -10,7 +10,10 @@ class ProductController extends Injectable
 {
     public function indexAction(): ResponseInterface
     {
-        $products = Product::find(['order' => 'name ASC']);
+        $products = Product::find([
+            'columns' => 'id, name, amount, currency',
+            'order'   => 'name ASC',
+        ]);
 
         return $this->response->setJsonContent($products);
     }

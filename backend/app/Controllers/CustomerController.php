@@ -10,7 +10,10 @@ class CustomerController extends Injectable
 {
     public function indexAction(): ResponseInterface
     {
-        $customers = Customer::find(['order' => 'name ASC']);
+        $customers = Customer::find([
+            'columns' => 'id, name',
+            'order'   => 'name ASC',
+        ]);
 
         return $this->response->setJsonContent($customers);
     }
