@@ -7,32 +7,30 @@ use App\Services\LogService;
 use App\Services\SyncService;
 use Phalcon\Db\Adapter\Pdo\Postgresql;
 use Phalcon\Di\Injectable;
+use Phalcon\Http\ResponseInterface;
 
 /** @property LogService $logService */
 /** @property SyncService $syncService */
 /** @property Postgresql $db */
 class SyncController extends Injectable
 {
-    public function syncAction(): string
+    public function syncAction(): ResponseInterface
     {
         $result = $this->syncService->run();
         $this->logService->save($result);
 
-        return json_encode($result);
+        return $this->response->setJsonContent($result);
     }
 
-    public function lastAction(): string
+    public function lastAction(): ResponseInterface
     {
         $log = SyncLog::findFirst(['order' => 'created_at DESC']);
-        if (!$log) {
-            return json_encode(null);
-        }
 
-        return json_encode([
-            'id'         => $log->id,
-            'status'     => $log->status,
-            'message'    => json_decode($log->message, true),
-            'created_at' => $log->created_at,
+        return $this->response->setJsonContent([
+            'id'         => $log?->id,
+            'status'     => $log?->status,
+            'message'    => $log?->message ? json_decode($log->message, true) : null,
+            'created_at' => $log?->created_at,
         ]);
     }
 }
